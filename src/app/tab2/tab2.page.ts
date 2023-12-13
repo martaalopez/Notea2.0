@@ -2,27 +2,23 @@ import * as L from 'leaflet';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NoteService } from '../services/note.service';
 import { UIService } from '../services/ui.service';
-import { Plugins } from '@capacitor/core';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Camera, CameraResultType } from '@capacitor/camera';
-import {  IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import * as CapacitorGeolocation from '@capacitor/geolocation';
-
-
-
-
-const { Geolocation } = Plugins;
+import { GeolocationPosition, Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
   standalone: true,
-  imports: [IonicModule,CommonModule,FormsModule,ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class Tab2Page {
+  public latitude: number | undefined;
+  public longitude: number | undefined;
   private map!: L.Map;
   private marker!: L.Marker;
   public form!: FormGroup;
@@ -50,7 +46,10 @@ export class Tab2Page {
       this.imageData = image.base64String;
       console.log('imageData:', this.imageData); // Verifica el contenido de imageData
       this.previewNote();
+      this.getCurrentLocation();
     }
+   
+
   }
 
   async initializeMap(latitude: number, longitude: number) {
@@ -83,7 +82,7 @@ export class Tab2Page {
 
   async getCurrentPosition(): Promise<GeolocationPosition> {
     try {
-      const position = await Geolocation['getCurrentPosition']();
+      const position = await Geolocation.getCurrentPosition();
       return position;
     } catch (error) {
       console.error(error);
@@ -91,25 +90,20 @@ export class Tab2Page {
     }
   }
 
-  async getCurrentLocation() {
+  public async getCurrentLocation() {
     try {
       const position = await this.getCurrentPosition();
       const { latitude, longitude } = position.coords;
 
-      if (!this.map) {
-        await this.initializeMap(latitude, longitude);
-      }
-
-      if (this.marker) {
-        this.map.removeLayer(this.marker);
-      }
-
-      this.marker = L.marker([latitude, longitude]).addTo(this.map);
-      this.map.setView([latitude, longitude], 13);
+      // Actualiza las coordenadas
+      this.latitude = latitude;
+      this.longitude = longitude;
     } catch (error) {
       console.error(error);
     }
   }
+ 
+
   previewNote() {
     if (this.imageData) {
       const imgElement = document.getElementById('previewImage') as HTMLImageElement | null;
@@ -122,51 +116,42 @@ export class Tab2Page {
     this.getCurrentPosition();
   }
 
-  async saveNote() {
-    if (!this.form.valid || !this.imageData) return;
 
-    try {
-      await this.uiService.showLoading();
-      const position = await this.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
 
-      const note = {
-        title: this.form.get('title')?.value,
-        description: this.form.get('description')?.value,
-        image: this.imageData,
-        date: new Date().toLocaleString(),
-        position: {
-          latitude: latitude,
-          longitude: longitude
-        }
-      };
-
-      await this.noteService.addNote(note);
-      this.form.reset();
-      this.imageData = undefined;
-      await this.uiService.showToast('Nota introducida correctamente', 'success');
-    } catch (error) {
-      await this.uiService.showToast('Error al insertar la nota', 'danger');
-    } finally {
-      await this.uiService.hideLoading();
-    }
+async saveNote() {
+  if (!this.form.valid || !this.imageData) {
+    console.log('Formulario no válido o no hay datos de imagen.');
+    return;
   }
-  public async ubiPhoto() {
-    if (this.imageData != null) {
-      try {
-        const position = await this.getCurrentPosition();
-        console.log('Position:', position);
-  
-        // Si necesitas utilizar la posición, coloca aquí tu lógica
-        
-      } catch (error) {
-        console.error('Error al obtener la ubicación:', error);
+
+  try {
+    await this.uiService.showLoading();
+    const position = await this.getCurrentPosition();
+    const { latitude, longitude } = position.coords;
+
+    const note = {
+      title: this.form.get('title')?.value,
+      description: this.form.get('description')?.value,
+      image: this.imageData,
+      date: new Date().toLocaleString(),
+      position: {
+        latitude: latitude,
+        longitude: longitude
       }
-    }
-  }
- 
-  
-  
+    };
 
-  
+    console.log('Nota a guardar:', note); // Verifica los datos de la nota antes de guardarla
+
+    await this.noteService.addNote(note);
+    this.form.reset();
+    this.imageData = undefined;
+    await this.uiService.showToast('Nota introducida correctamente', 'success');
+  } catch (error) {
+    console.error('Error al insertar la nota:', error);
+    await this.uiService.showToast('Error al insertar la nota', 'danger');
+  } finally {
+    await this.uiService.hideLoading();
+  }
+}
+
 }

@@ -12,6 +12,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class NoteService {
+  map(arg0: (e: any) => any): NoteService {
+    throw new Error('Method not implemented.');
+  }
   myCollection: AngularFirestoreCollection<any>;
   myCollection_new:any;
   private fireStore: AngularFirestore = inject(AngularFirestore); //old

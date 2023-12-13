@@ -32,9 +32,13 @@
       </ion-modal>
     </ion-item>
     <ion-button expand="full" (click)="takePhoto()">Tomar Foto</ion-button>
-    <ion-button expand="full" (click)="saveNote()" [disabled]="!form.valid || !imageData">Guardar Nota</ion-button>
-  </form>
+    <ion-button expand="full" type="submit">Guardar Nota</ion-button>
 
-  <img [src]="'data:image/jpeg;base64,' + imageData" *ngIf="imageData" />
-  <div id="map" style="height: 180px; width:1000px;"></div>
+    <img [src]="'data:image/jpeg;base64,' + imageData" *ngIf="imageData" />
+    <div id="map"></div>
+    <div *ngIf="latitude !== undefined && longitude !== undefined">
+      <p>Latitud: {{ latitude }}</p>
+      <p>Longitud: {{ longitude }}</p>
+    </div>
+  </form>
 </ion-content>
