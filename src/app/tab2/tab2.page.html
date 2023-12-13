@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Crear Nota
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="form" (ngSubmit)="saveNote()">
+    <ion-item>
+      <ion-label>
+        Título
+      </ion-label>
+      <ion-input label="Título" type="text" formControlName="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Descripción
+      </ion-label>
+      <ion-textarea label="Descripción" formControlName="description"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Date
+      </ion-label>
+      <ion-datetime-button datetime="datetime"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="datetime"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+    <ion-button expand="full" (click)="takePhoto()">Tomar Foto</ion-button>
+    <ion-button expand="full" (click)="saveNote()" [disabled]="!form.valid || !imageData">Guardar Nota</ion-button>
+  </form>
+
+  <img [src]="'data:image/jpeg;base64,' + imageData" *ngIf="imageData" />
+  <div id="map" style="height: 180px; width:1000px;"></div>
+</ion-content>

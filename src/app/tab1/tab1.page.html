@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Tab 1
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    @for(note of noteS.notes$ | async;track note.key){
+    <ion-item-sliding>
+      <ion-item-options side="start">
+        <ion-item-option color="primary">
+          <ion-icon slot="start" src="assets/icons/create.svg" (click)="this.editNote(note)"style="zoom: 1.5;"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+  
+      <ion-item>
+        <ion-label>{{note.title}}</ion-label>
+        <p>{{note.description}}</p>
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="danger" expandable>
+          <ion-icon slot="start" src="assets/icons/trash.svg" (click)="deleteNoteConfirmation(note)" style="zoom: 1.5;"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  }
+  </ion-list>
+</ion-content>
