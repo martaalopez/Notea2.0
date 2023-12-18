@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="header-title">Edit Note</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form  [formGroup]="todo" (ngSubmit)="logForm()">
+    <ion-item class="form-item">
+      <ion-label>Title</ion-label>
+      <ion-input formControlName="title" class="form-input"></ion-input>
+    </ion-item>
+
+    <ion-item class="form-item">
+      <ion-label>Description</ion-label>
+      <ion-textarea formControlName="description" class="form-textarea"></ion-textarea>
+    </ion-item>
+
+    <ion-button expand="full" type="submit">Guardar Nota</ion-button>
+  </form>
+</ion-content>

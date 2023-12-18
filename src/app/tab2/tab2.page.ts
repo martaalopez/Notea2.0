@@ -41,16 +41,17 @@ export class Tab2Page {
       allowEditing: true,
       resultType: CameraResultType.Base64
     });
-
+  
     if (image && image.base64String) {
       this.imageData = image.base64String;
       console.log('imageData:', this.imageData); // Verifica el contenido de imageData
       this.previewNote();
       this.getCurrentLocation();
+    } else {
+      console.error('La imagen capturada está vacía o no tiene base64String.');
     }
-   
-
   }
+  
 
   async initializeMap(latitude: number, longitude: number) {
     try {
@@ -94,8 +95,6 @@ export class Tab2Page {
     try {
       const position = await this.getCurrentPosition();
       const { latitude, longitude } = position.coords;
-
-      // Actualiza las coordenadas
       this.latitude = latitude;
       this.longitude = longitude;
     } catch (error) {
@@ -112,9 +111,12 @@ export class Tab2Page {
       } else {
         console.error('Elemento HTML con ID "previewImage" no encontrado');
       }
+    } else {
+      console.error('La cadena base64 de la imagen está vacía o es inválida.');
     }
     this.getCurrentPosition();
   }
+  
 
 
 
@@ -153,5 +155,16 @@ async saveNote() {
     await this.uiService.hideLoading();
   }
 }
+
+async borrarFoto() {
+  this.imageData = undefined; // Elimina la foto actual
+  const imgElement = document.getElementById('previewImage') as HTMLImageElement | null;
+  if (imgElement) {
+    imgElement.src = ''; // Limpia la imagen previa
+  } else {
+    console.error('Elemento HTML con ID "previewImage" no encontrado');
+  }
+}
+
 
 }

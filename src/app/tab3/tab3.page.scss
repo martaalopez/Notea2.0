@@ -1,0 +1,45 @@
+.brand-name {
+    font-size: 2.5em;
+    font-weight: bold;
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .card-content {
+    font-size: 0.9em;
+  }
+  
+  .main-container {
+    padding: 20px;
+  }
+  
+  .reviews-section ion-card {
+    margin-bottom: 15px;
+  }
+
+.pregunta-disponible {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.preguntas-disponibles-label {
+  font-size: 12px; /* Ajusta el tamaño de fuente según tu preferencia */
+}
+
+
+
+  

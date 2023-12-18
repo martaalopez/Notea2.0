@@ -31,14 +31,15 @@
         </ng-template>
       </ion-modal>
     </ion-item>
-    <ion-button expand="full" (click)="takePhoto()">Tomar Foto</ion-button>
-    <ion-button expand="full" type="submit">Guardar Nota</ion-button>
 
+    <ion-button expand="full" type="submit">Guardar Nota</ion-button>
+     <ion-toolbar>
+        <ion-button  slot="start"expand="full" (click)="takePhoto()">Tomar Foto</ion-button>
+        <ion-button  slot="end"expand="full" (click)="borrarFoto()">Borrar Foto</ion-button>
+    </ion-toolbar>
     <img [src]="'data:image/jpeg;base64,' + imageData" *ngIf="imageData" />
     <div id="map"></div>
     <div *ngIf="latitude !== undefined && longitude !== undefined">
-      <p>Latitud: {{ latitude }}</p>
-      <p>Longitud: {{ longitude }}</p>
     </div>
   </form>
 </ion-content>
